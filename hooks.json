@@ -1,0 +1,17 @@
+{
+  "name": "myhooks",
+  "description": "Universal SessionStart hook that loads a configurable list of skills into every Claude Code + Codex session.",
+  "version": 1,
+  "files": [
+    "scripts/load-skills.mjs",
+    "skills.config.example.json"
+  ],
+  "hooks": [
+    {
+      "id": "load-skills-on-start",
+      "event": "SessionStart",
+      "command": "node $HOOK_DIR/scripts/load-skills.mjs",
+      "agents": { "codex": { "matcher": "startup|resume" } }
+    }
+  ]
+}
