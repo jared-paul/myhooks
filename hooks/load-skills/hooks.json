@@ -8,7 +8,7 @@
   ],
   "hooks": [
     {
-      "id": "load-skills-on-start",
+      "id": "load-skills",
       "event": "SessionStart",
       "command": "node $HOOK_DIR/scripts/load-skills.mjs",
       "agents": { "codex": { "matcher": "startup|resume" } }

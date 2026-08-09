@@ -1,5 +1,5 @@
 {
-  "_comment": "Copy to ~/.agenthooks/scripts/myhooks/load-skills/config.json and edit. Each entry can be a bare skill name (resolved against ~/.claude/skills/<name>/SKILL.md), a directory containing SKILL.md, or a direct path to a .md file.",
+  "_comment": "Copy to ~/.agents/hooks/load-skills/config.json and edit. Each entry can be a bare skill name (resolved against ~/.claude/skills/<name>/SKILL.md), a directory containing SKILL.md, or a direct path to a .md file.",
   "skills": [
     "caveman",
     "simplify",

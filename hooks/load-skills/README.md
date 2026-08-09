@@ -11,17 +11,17 @@ On session start, the hook emits a short instruction listing the skills you've c
 The config lives inside agenthooks's managed tree, scoped **per-hook**:
 
 ```
-~/.agenthooks/scripts/<package>/<hook-name>/config.json
+~/.agents/hooks/<hook-id>/config.json
 ```
 
-For this hook: `~/.agenthooks/scripts/myhooks/load-skills/config.json`. The path is keyed by hook name (not the manifest hash), so it survives edits to `hooks.json`. And because it sits under the package dir, `agenthooks remove myhooks` deletes it along with the rest of the package — the config's lifecycle is tied to the hook.
+For this hook: `~/.agents/hooks/load-skills/config.json`. The path is keyed by hook id (not the manifest hash), so it survives edits to `hooks.json`. And because it sits under the hook's installed dir, `agenthooks remove myhooks` deletes it along with the hook — the config's lifecycle is tied to the hook.
 
 Resolution order:
 
 1. `$MYHOOKS_LOAD_SKILLS_CONFIG` — explicit override (optional, e.g. for testing)
-2. `~/.agenthooks/scripts/myhooks/load-skills/config.json` — default
+2. `~/.agents/hooks/load-skills/config.json` — default
 
-To set up after installing, start a session — the hook prints the exact `mkdir` + `cp` commands (with the current manifest hash filled in). Then edit the config and restart.
+To set up after installing, start a session — the hook prints the exact `cp` command. Then edit the config and restart.
 
 Each entry in `skills` can be:
 

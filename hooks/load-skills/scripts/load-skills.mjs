@@ -11,8 +11,6 @@ import { basename, dirname, join, resolve } from "node:path";
 import { argv, env, exit, stdout } from "node:process";
 
 const HOOK_DIR = env.HOOK_DIR ?? dirname(resolve(argv[1]));
-const PKG_DIR = dirname(HOOK_DIR);
-const HOOK_NAME = "load-skills";
 const SKILLS_DIR = env.MYHOOKS_SKILLS_DIR ?? join(homedir(), ".claude", "skills");
 
 function drainStdin() {
@@ -20,7 +18,7 @@ function drainStdin() {
 }
 
 function defaultConfigPath() {
-  return join(PKG_DIR, HOOK_NAME, "config.json");
+  return join(HOOK_DIR, "config.json");
 }
 
 function resolveConfigPath() {
@@ -71,10 +69,8 @@ function main() {
 
   const configPath = resolveConfigPath();
   if (!configPath) {
-    const target = defaultConfigPath();
     emit("[myhooks] No config found. Set up with:");
-    emit(`[myhooks]   mkdir -p ${PKG_DIR}/${HOOK_NAME}`);
-    emit(`[myhooks]   cp ${HOOK_DIR}/config.example.json ${target}`);
+    emit(`[myhooks]   cp ${HOOK_DIR}/config.example.json ${HOOK_DIR}/config.json`);
     emit("[myhooks] Then edit the config and restart the session.");
     return;
   }
