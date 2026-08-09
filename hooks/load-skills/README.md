@@ -8,18 +8,20 @@ On session start, the hook emits a short instruction listing the skills you've c
 
 ## Configure
 
-The hook looks for a config file in this order:
+The config lives inside agenthooks's managed tree, scoped **per-hook**:
 
-1. `$MYHOOKS_SKILLS_CONFIG` — explicit path
-2. `~/.config/myhooks/skills.json` — user default (recommended)
-3. `$HOOK_DIR/skills.json` — in-package fallback (version-controlled with the hook)
-
-Copy the example and edit:
-
-```sh
-mkdir -p ~/.config/myhooks
-cp hooks/load-skills/skills.config.example.json ~/.config/myhooks/skills.json
 ```
+~/.agenthooks/scripts/<package>/<hook-name>/config.json
+```
+
+For this hook: `~/.agenthooks/scripts/myhooks/load-skills/config.json`. The path is keyed by hook name (not the manifest hash), so it survives edits to `hooks.json`. And because it sits under the package dir, `agenthooks remove myhooks` deletes it along with the rest of the package — the config's lifecycle is tied to the hook.
+
+Resolution order:
+
+1. `$MYHOOKS_LOAD_SKILLS_CONFIG` — explicit override (optional, e.g. for testing)
+2. `~/.agenthooks/scripts/myhooks/load-skills/config.json` — default
+
+To set up after installing, start a session — the hook prints the exact `mkdir` + `cp` commands (with the current manifest hash filled in). Then edit the config and restart.
 
 Each entry in `skills` can be:
 
@@ -55,5 +57,5 @@ A `SessionStart` hook can put text into context but can't register new invokable
 
 | Var | Default | Purpose |
 |---|---|---|
-| `MYHOOKS_SKILLS_CONFIG` | — | Override config file path |
+| `MYHOOKS_LOAD_SKILLS_CONFIG` | — | Override config file path (optional) |
 | `MYHOOKS_SKILLS_DIR` | `~/.claude/skills` | Resolve bare skill names against this dir |

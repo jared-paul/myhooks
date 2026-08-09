@@ -4,7 +4,7 @@
   "version": 1,
   "files": [
     "scripts/load-skills.mjs",
-    "skills.config.example.json"
+    "config.example.json"
   ],
   "hooks": [
     {

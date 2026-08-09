@@ -11,19 +11,22 @@ import { basename, dirname, join, resolve } from "node:path";
 import { argv, env, exit, stdout } from "node:process";
 
 const HOOK_DIR = env.HOOK_DIR ?? dirname(resolve(argv[1]));
+const PKG_DIR = dirname(HOOK_DIR);
+const HOOK_NAME = "load-skills";
 const SKILLS_DIR = env.MYHOOKS_SKILLS_DIR ?? join(homedir(), ".claude", "skills");
 
 function drainStdin() {
   try { readFileSync(0, "utf8"); } catch { /* no stdin is fine */ }
 }
 
+function defaultConfigPath() {
+  return join(PKG_DIR, HOOK_NAME, "config.json");
+}
+
 function resolveConfigPath() {
-  if (env.MYHOOKS_SKILLS_CONFIG) return env.MYHOOKS_SKILLS_CONFIG;
-  const userCfg = join(homedir(), ".config", "myhooks", "skills.json");
-  if (existsSync(userCfg)) return userCfg;
-  const pkgCfg = join(HOOK_DIR, "skills.json");
-  if (existsSync(pkgCfg)) return pkgCfg;
-  return null;
+  if (env.MYHOOKS_LOAD_SKILLS_CONFIG) return env.MYHOOKS_LOAD_SKILLS_CONFIG;
+  const cfg = defaultConfigPath();
+  return existsSync(cfg) ? cfg : null;
 }
 
 // Resolve a config entry to a concrete SKILL.md path, or {error}. Entry may be:
@@ -68,8 +71,11 @@ function main() {
 
   const configPath = resolveConfigPath();
   if (!configPath) {
-    emit("[myhooks] No skills config found.");
-    emit("[myhooks] Create one at ~/.config/myhooks/skills.json — see skills.config.example.json.");
+    const target = defaultConfigPath();
+    emit("[myhooks] No config found. Set up with:");
+    emit(`[myhooks]   mkdir -p ${PKG_DIR}/${HOOK_NAME}`);
+    emit(`[myhooks]   cp ${HOOK_DIR}/config.example.json ${target}`);
+    emit("[myhooks] Then edit the config and restart the session.");
     return;
   }
 

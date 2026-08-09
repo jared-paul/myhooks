@@ -1,9 +1,0 @@
-{
-  "_comment": "Copy to ~/.config/myhooks/skills.json and edit. Each entry can be a bare skill name (resolved against ~/.claude/skills/<name>/SKILL.md), a directory containing SKILL.md, or a direct path to a .md file.",
-  "skills": [
-    "caveman",
-    "simplify",
-    "/home/you/src/my-skills/my-custom-skill",
-    "/home/you/notes/team-conventions.md"
-  ]
-}
