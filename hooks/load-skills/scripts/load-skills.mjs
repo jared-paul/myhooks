@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 // SessionStart hook: emit a short instruction telling the model to load and
 // apply a configurable list of skills. We do NOT dump skill contents — the
-// model loads them itself, via the Skill tool if available or by reading the
-// SKILL.md path we list. Never exits non-zero (a hook failure must not block
-// session start).
+// model loads them itself, however its harness loads skills. Never exits
+// non-zero (a hook failure must not block session start).
 
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { homedir } from "node:os";
@@ -113,8 +112,6 @@ function main() {
     const noun = rejected === 1 ? "entry" : "entries";
     emit(`[myhooks] ${rejected} non-string ${noun} ignored.`);
   }
-  emit("");
-  emit("For each skill above: if it is in your available skills, invoke it via the Skill tool now. Otherwise read the SKILL.md at the path shown. Apply each skill's instructions to all subsequent work this session.");
 }
 
 try { main(); }

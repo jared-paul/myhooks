@@ -44,14 +44,14 @@ Each entry in `skills` can be:
 
 ## How it works
 
-- Claude Code and Codex both inject a `SessionStart` hook's stdout into the session context. This hook prints a directive: a list of `name → SKILL.md path` lines, then a one-sentence instruction to load each (Skill tool if available, else Read) and apply them for the session.
+- Claude Code and Codex both inject a `SessionStart` hook's stdout into the session context. This hook prints a one-line directive — "Load and apply these N skills for the session" — followed by a `name → SKILL.md path` list. The model loads each however its harness loads skills; the hook stays out of the mechanism.
 - The hook only `stat`s files to resolve paths — it never reads skill contents — so session-start cost is flat regardless of how big the skills are.
 - The hook never exits non-zero. Missing config, bad JSON, and unresolvable entries degrade to a warning line — they never block the session.
 - The Codex matcher is `startup|resume` so the hook skips `/clear`. Override via the manifest if you want different behavior.
 
 ### Why an instruction, not injected content
 
-A `SessionStart` hook can put text into context but can't register new invokable skills — Claude Code discovers those from `~/.claude/skills/` at process startup, before hooks run. So instead of dumping every skill's body up front, the hook points the model at them and lets it load each one (lazily, through the normal Skill / Read tools). Cheaper at start, and skills already registered in the agent get invoked through the real Skill tool rather than read as plain text.
+A `SessionStart` hook can put text into context but can't register new invokable skills — Claude Code discovers those from `~/.claude/skills/` at process startup, before hooks run. So instead of dumping every skill's body up front, the hook points the model at them and lets it load each one lazily through whatever its harness offers. Cheaper at start, and agent-agnostic: it doesn't assume a specific skill-loading tool.
 
 ## Environment variables
 
