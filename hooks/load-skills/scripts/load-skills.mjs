@@ -104,7 +104,6 @@ function main() {
   // into the model's context — this block is read as a session directive.
   emit(`[myhooks] Load and apply these ${resolved.length} skill(s) for the rest of this session:`);
   for (const s of resolved) emit(`[myhooks]   - ${s.label}  →  ${s.path}`);
-  emit("[myhooks] Use your harness's skill mechanism where available; otherwise read the SKILL.md path shown.");
   if (warnings.length) {
     emit(`[myhooks] ${warnings.length} skill(s) skipped:`);
     for (const w of warnings) emit(`[myhooks]   - ${w}`);
@@ -113,6 +112,8 @@ function main() {
     const noun = rejected === 1 ? "entry" : "entries";
     emit(`[myhooks] ${rejected} non-string ${noun} ignored.`);
   }
+  emit("");
+  emit("For each skill above: if it is in your available skills, load the skill now. Otherwise read the SKILL.md at the path shown. Apply each skill's instructions to all subsequent work this session.");
 }
 
 try { main(); }
