@@ -11,9 +11,14 @@
 
 Plain text only: no colors, no decoration, so it survives every terminal theme. The `resume` / `clear` marker is appended when the session is restored rather than freshly started (Claude Code reports this via the hook payload's `source` field).
 
-## Where it prints
+## Where it shows up
 
-Claude Code captures `SessionStart` stdout into the model's context — the terminal never shows it — so the banner writes directly to `/dev/tty`. If that's unavailable (no controlling terminal), it falls back to stdout.
+Hooks run without a controlling terminal, so stdout alone is context for the model, and `/dev/tty` is unreachable. The hook emits JSON instead, using Claude Code's documented output fields:
+
+- `systemMessage` — the banner line, shown in the transcript at session start
+- `terminalSequence` — sets the terminal/window title to the same line, so every window stays labeled after the scrollback moves on
+
+Codex gets the plain-text line via `MYHOOKS_BANNER_PLAIN=1` in its command override.
 
 ## Agent detection
 
