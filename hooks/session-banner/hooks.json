@@ -1,0 +1,19 @@
+{
+  "name": "session-banner",
+  "description": "SessionStart hook that prints a one-line agent + project banner so you always know which window is which.",
+  "version": 1,
+  "files": ["scripts/banner.mjs"],
+  "hooks": [
+    {
+      "id": "print-banner",
+      "event": "SessionStart",
+      "command": "node $HOOK_DIR/scripts/banner.mjs",
+      "agents": {
+        "codex": {
+          "matcher": "startup|resume",
+          "command": "MYHOOKS_BANNER_AGENT=codex node $HOOK_DIR/scripts/banner.mjs"
+        }
+      }
+    }
+  ]
+}

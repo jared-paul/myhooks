@@ -7,6 +7,8 @@
 | Hook | Event | What it does |
 |---|---|---|
 | [`load-skills`](./hooks/load-skills/) | `SessionStart` | Tell the model to load and apply a configurable list of skills for the session |
+| [`session-banner`](./hooks/session-banner/) | `SessionStart` | Print a one-line agent · project banner so you know which window is which |
+| [`tool-latency`](./hooks/tool-latency/) | `PreToolUse` + `PostToolUse` | Record how long every tool call took; p50/p95 summary per tool |
 
 ## Install a hook
 
