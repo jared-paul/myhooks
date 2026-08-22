@@ -9,7 +9,6 @@
 // Claude Code additionally supports terminalSequence, which we use to set the
 // terminal/window title — Codex's schema has no such field, so we omit it there.
 
-import { appendFileSync } from "node:fs";
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 import { env, exit, stdout } from "node:process";
@@ -34,10 +33,5 @@ const line = `▸ ${parts.join(" · ")}`;
 const out = { systemMessage: line };
 if (agent !== "codex") out.terminalSequence = `\x1b]0;${line}\x07`;
 
-if (env.MYHOOKS_BANNER_DEBUG) {
-  try {
-    appendFileSync(env.MYHOOKS_BANNER_DEBUG, `${new Date().toISOString()} ${agent} ${line}\n`);
-  } catch {}
-}
 stdout.write(JSON.stringify(out));
 exit(0);
