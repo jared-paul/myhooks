@@ -19,7 +19,7 @@ Measuring from inside hooks means each recorded duration includes ~50ms of Node 
 node hooks/tool-latency/scripts/summary.mjs --hours 24
 ```
 
-Installed via agenthooks, the script lands under `~/.agents/hooks/` — `npx agenthooks list` shows the installed path.
+Installed via @cerealbox/hooks, the script lands under `~/.agents/hooks/` — `npx @cerealbox/hooks list` shows the installed path.
 
 Prints per-tool call count, p50, p95, and max over the window, sorted by p95:
 
@@ -41,7 +41,7 @@ Both hook scripts never exit non-zero — a broken timer must not block or annot
 ## Install
 
 ```sh
-npx agenthooks add ./hooks/tool-latency
+npx @cerealbox/hooks add ./hooks/tool-latency
 ```
 
-Removes cleanly with `npx agenthooks remove tool-latency`. Uninstalling keeps `latency.ndjson` (it's outside the managed tree) — delete `~/.agents/tool-latency` yourself if you want the data gone.
+Removes cleanly with `npx @cerealbox/hooks remove tool-latency`. Uninstalling keeps `latency.ndjson` (it's outside the managed tree) — delete `~/.agents/tool-latency` yourself if you want the data gone.

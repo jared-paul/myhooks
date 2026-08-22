@@ -8,13 +8,13 @@ On session start, the hook emits a short instruction listing the skills you've c
 
 ## Configure
 
-The config lives inside agenthooks's managed tree, scoped **per-hook**:
+The config lives inside the @cerealbox/hooks managed tree, scoped **per-hook**:
 
 ```
 ~/.agents/hooks/<hook-id>/config.json
 ```
 
-For this hook: `~/.agents/hooks/load-skills/config.json`. The path is keyed by hook id (not the manifest hash), so it survives edits to `hooks.json`. And because it sits under the hook's installed dir, `agenthooks remove myhooks` deletes it along with the hook — the config's lifecycle is tied to the hook.
+For this hook: `~/.agents/hooks/load-skills/config.json`. The path is keyed by hook id (not the manifest hash), so it survives edits to `hooks.json`. And because it sits under the hook's installed dir, `@cerealbox/hooks remove load-skills` deletes it along with the hook — the config's lifecycle is tied to the hook.
 
 Resolution order:
 

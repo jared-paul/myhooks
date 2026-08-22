@@ -1,6 +1,6 @@
 # myhooks
 
-> Personal collection of agent hooks for Claude Code + Codex. Each subdirectory under `hooks/` is a self-contained package installable with [`agenthooks`](https://github.com/jared-paul/agenthooks).
+> Personal collection of agent hooks for Claude Code + Codex. Each subdirectory under `hooks/` is a self-contained package installable with [`@cerealbox/hooks`](https://github.com/cereal-dot-box/hooks).
 
 ## Hooks
 
@@ -13,16 +13,16 @@
 ## Install a hook
 
 ```sh
-npx agenthooks add ./hooks/<name>     # merge into ~/.claude/settings.json + ~/.codex/hooks.json
-npx agenthooks list                   # show installed packages + drift
-npx agenthooks remove <name>          # remove cleanly
+npx @cerealbox/hooks add ./hooks/<name>     # merge into ~/.claude/settings.json + ~/.codex/hooks.json
+npx @cerealbox/hooks list                   # show installed packages + drift
+npx @cerealbox/hooks remove <name>          # remove cleanly
 ```
 
-> Remote sources (`github:`) are planned for agenthooks; until then, clone and `add` by local path.
+> Remote sources work too: `npx @cerealbox/hooks add github:owner/repo[@ref][#path]`.
 
 ## Adding a hook
 
-Drop a new directory under `hooks/` with a `hooks.json` manifest (see [agenthooks](https://github.com/jared-paul/agenthooks) for the format) and add a row to the table above.
+Drop a new directory under `hooks/` with a `hooks.json` manifest (see [`@cerealbox/hooks`](https://github.com/cereal-dot-box/hooks) for the format) and add a row to the table above.
 
 ## License
 

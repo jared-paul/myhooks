@@ -29,7 +29,7 @@ Codex's override pins the matcher to `startup|resume` so re-running on `/clear` 
 ## Install
 
 ```sh
-npx agenthooks add ./hooks/session-banner
+npx @cerealbox/hooks add ./hooks/session-banner
 ```
 
-Removes cleanly with `npx agenthooks remove session-banner`.
+Removes cleanly with `npx @cerealbox/hooks remove session-banner`.
