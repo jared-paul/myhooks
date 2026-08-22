@@ -117,7 +117,7 @@ function main() {
     emit(`[myhooks] ${rejected} non-string ${noun} ignored.`);
   }
   emit("");
-  emit("For each skill above: if it is in your available skills, load the skill now. Otherwise read the SKILL.md at the path shown. Apply each skill's instructions to all subsequent work this session.");
+  emit("For each skill above: if it is in your available skills, load the skill now. Otherwise read the SKILL.md at the path shown. Apply each skill's instructions to all subsequent work this session. Confirm in your first reply which skills you loaded.");
 }
 
 try { main(); }
