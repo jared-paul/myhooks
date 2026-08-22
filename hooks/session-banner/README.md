@@ -13,12 +13,10 @@ Plain text only: no colors, no decoration, so it survives every terminal theme. 
 
 ## Where it shows up
 
-Hooks run without a controlling terminal, so stdout alone is context for the model, and `/dev/tty` is unreachable. The hook emits JSON instead, using Claude Code's documented output fields:
+Hooks run without a controlling terminal, so stdout alone is context for the model, and `/dev/tty` is unreachable. The hook emits JSON instead, using each agent's documented output fields:
 
-- `systemMessage` — the banner line, shown in the transcript at session start
-- `terminalSequence` — sets the terminal/window title to the same line, so every window stays labeled after the scrollback moves on
-
-Codex gets the plain-text line via `MYHOOKS_BANNER_PLAIN=1` in its command override.
+- `systemMessage` — the banner line, shown to the user (Claude Code transcript; Codex UI)
+- `terminalSequence` — Claude Code only: sets the terminal/window title to the same line, so every window stays labeled after the scrollback moves on. Omitted for Codex, whose schema has no such field (unknown fields mark the hook failed).
 
 ## Agent detection
 
