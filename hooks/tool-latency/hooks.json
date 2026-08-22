@@ -1,0 +1,18 @@
+{
+  "name": "tool-latency",
+  "description": "Record how long every tool call took: PreToolUse stamps a start time, PostToolUse appends the duration to ~/.agents/tool-latency/latency.ndjson. Includes a summary script for p50/p95 per tool.",
+  "version": 1,
+  "files": ["scripts/mark.mjs", "scripts/record.mjs", "scripts/summary.mjs"],
+  "hooks": [
+    {
+      "id": "latency-mark",
+      "event": "PreToolUse",
+      "command": "node $HOOK_DIR/scripts/mark.mjs"
+    },
+    {
+      "id": "latency-record",
+      "event": "PostToolUse",
+      "command": "node $HOOK_DIR/scripts/record.mjs"
+    }
+  ]
+}
