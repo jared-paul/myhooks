@@ -1,5 +1,5 @@
 {
-  "name": "myhooks",
+  "name": "load-skills",
   "description": "Universal SessionStart hook that loads a configurable list of skills into every Claude Code + Codex session.",
   "version": 1,
   "files": [
