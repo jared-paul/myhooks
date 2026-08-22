@@ -61,7 +61,11 @@ function label(entry) {
   return basename(entry.replace(/\.md$/, "").replace(/\/$/, ""));
 }
 
-function emit(line) { stdout.write(line + "\n"); }
+// Codex's SessionStart validation rejects plain-text stdout ("invalid session
+// start JSON output"), so everything is buffered and emitted once as the JSON
+// envelope both agents document: hookSpecificOutput.additionalContext.
+let out = "";
+function emit(line) { out += line + "\n"; }
 
 function main() {
   drainStdin();
@@ -118,4 +122,7 @@ function main() {
 
 try { main(); }
 catch (e) { emit(`[myhooks] unexpected error: ${e?.stack ?? e}`); }
+stdout.write(JSON.stringify({
+  hookSpecificOutput: { hookEventName: "SessionStart", additionalContext: out },
+}));
 exit(0);

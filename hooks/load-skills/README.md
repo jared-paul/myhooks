@@ -44,7 +44,7 @@ Each entry in `skills` can be:
 
 ## How it works
 
-- Claude Code and Codex both inject a `SessionStart` hook's stdout into the session context. This hook prints a one-line directive — "Load and apply these N skills for the session" — followed by a `name → SKILL.md path` list. The model loads each however its harness loads skills; the hook stays out of the mechanism.
+- Claude Code and Codex both inject a `SessionStart` hook's output into the session context. The directive — "Load and apply these N skills for the session" plus a `name → SKILL.md path` list — is emitted as the JSON envelope both agents document (`hookSpecificOutput.additionalContext`), because Codex's TUI rejects plain-text stdout with "invalid session start JSON output". The model loads each however its harness loads skills; the hook stays out of the mechanism.
 - The hook only `stat`s files to resolve paths — it never reads skill contents — so session-start cost is flat regardless of how big the skills are.
 - The hook never exits non-zero. Missing config, bad JSON, and unresolvable entries degrade to a warning line — they never block the session.
 - The Codex matcher is `startup|resume` so the hook skips `/clear`. Override via the manifest if you want different behavior.
