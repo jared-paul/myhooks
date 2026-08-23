@@ -9,6 +9,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { extname, isAbsolute, join, dirname, relative } from "node:path";
 import { spawnSync } from "node:child_process";
 import { env, exit, stdout } from "node:process";
+import { pathToFileURL } from "node:url";
 
 const TIMEOUT_MS = Number(env.MYHOOKS_LINT_TIMEOUT_MS ?? 30_000);
 const MAX_FILES = 10;
@@ -22,7 +23,7 @@ const LINTABLE_EXT = new Set([
 
 // Ordered by priority: the config file that appears nearest the edited file
 // picks the linter.
-const LINTERS = [
+export const LINTERS = [
   {
     name: "biome",
     configs: ["biome.json", "biome.jsonc"],
@@ -46,7 +47,7 @@ const LINTERS = [
   },
 ];
 
-function readPayload() {
+export function readPayload() {
   try {
     return JSON.parse(readFileSync(0, "utf8") || "{}") ?? {};
   } catch {
@@ -88,7 +89,7 @@ function editedFiles(payload) {
 }
 
 /** Nearest ancestor dir of `from` (inclusive) containing one of `names`. */
-function findUp(from, names) {
+export function findUp(from, names) {
   let dir = from;
   for (;;) {
     for (const n of names) {
@@ -100,7 +101,7 @@ function findUp(from, names) {
   }
 }
 
-function localBin(configDir, cmd) {
+export function localBin(configDir, cmd) {
   const bin = findUp(configDir, [`node_modules/.bin/${cmd}`]);
   return bin ? join(bin.dir, `node_modules/.bin/${cmd}`) : null;
 }
@@ -118,27 +119,30 @@ function run(linter, configDir, file, configName) {
   return out.trim() ? out.trim() : null;
 }
 
-try {
-  const payload = readPayload();
-  const files = editedFiles(payload);
-  if (files.length === 0) exit(0);
+// check.mjs imports the detection helpers above; only act when run directly.
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  try {
+    const payload = readPayload();
+    const files = editedFiles(payload);
+    if (files.length === 0) exit(0);
 
-  const parts = [];
-  for (const file of files) {
-    const hit = findUp(dirname(file), LINTERS.flatMap((l) => l.configs));
-    if (!hit) continue; // no linter configured — nothing to say
-    const linter = LINTERS.find((l) => l.configs.includes(hit.found));
-    const out = run(linter, hit.dir, file, hit.found);
-    if (out) parts.push(out);
+    const parts = [];
+    for (const file of files) {
+      const hit = findUp(dirname(file), LINTERS.flatMap((l) => l.configs));
+      if (!hit) continue; // no linter configured — nothing to say
+      const linter = LINTERS.find((l) => l.configs.includes(hit.found));
+      const out = run(linter, hit.dir, file, hit.found);
+      if (out) parts.push(out);
+    }
+    if (parts.length === 0) exit(0);
+
+    const cwd = typeof payload.cwd === "string" && payload.cwd ? payload.cwd : process.cwd();
+    const rel = files.map((f) => relative(cwd, f) || f).join(", ");
+    let reason = `Linter reported problems in ${rel}:\n\n${parts.join("\n\n")}`;
+    if (reason.length > MAX_REASON) reason = reason.slice(0, MAX_REASON) + "\n…(truncated)";
+    stdout.write(JSON.stringify({ decision: "block", reason }));
+  } catch {
+    // best-effort; never break the session over linting
   }
-  if (parts.length === 0) exit(0);
-
-  const cwd = typeof payload.cwd === "string" && payload.cwd ? payload.cwd : process.cwd();
-  const rel = files.map((f) => relative(cwd, f) || f).join(", ");
-  let reason = `Linter reported problems in ${rel}:\n\n${parts.join("\n\n")}`;
-  if (reason.length > MAX_REASON) reason = reason.slice(0, MAX_REASON) + "\n…(truncated)";
-  stdout.write(JSON.stringify({ decision: "block", reason }));
-} catch {
-  // best-effort; never break the session over linting
+  exit(0);
 }
-exit(0);

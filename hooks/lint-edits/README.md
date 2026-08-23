@@ -4,13 +4,15 @@
 
 ## How it works
 
-One `PostToolUse` hook (`lint.mjs`):
+Two hooks:
 
-1. Extracts the edited file path from the tool input (`Edit` / `Write` / `MultiEdit`, or a Codex `apply_patch` body).
-2. Skips non-lintable files (`.md`, images, anything under `node_modules/`).
-3. Finds the nearest linter config walking up from the file — **biome** (`biome.json{,c}`) > **eslint** (`eslint.config.*` / `.eslintrc*`) > **oxlint** (`.oxlintrc.json`). No config found = silent no-op, so the hook is safe to install globally.
-4. Runs the project-local binary from `node_modules/.bin` (falls back to `npx --no-install`; still nothing = no-op).
-5. On findings, prints `{"decision":"block","reason":"<linter output>"}` — the model sees the diagnostics and fixes them. Clean lint, missing linter, or linter crash all exit silently: linting must never break the session.
+- **`SessionStart`** (`check.mjs`) — if the project configures a linter but the linter isn't installed (not in `node_modules/.bin`, not resolvable via `npx --no-install`), print a one-line warning so the edit hook's silence isn't mistaken for clean lint. No linter config at all = no warning; the hook is inert by design there.
+- **`PostToolUse`** (`lint.mjs`) —
+  1. Extracts the edited file path from the tool input (`Edit` / `Write` / `MultiEdit`, or a Codex `apply_patch` body).
+  2. Skips non-lintable files (`.md`, images, anything under `node_modules/`).
+  3. Finds the nearest linter config walking up from the file — **biome** (`biome.json{,c}`) > **eslint** (`eslint.config.*` / `.eslintrc*`) > **oxlint** (`.oxlintrc.json`). No config found = silent no-op.
+  4. Runs the project-local binary from `node_modules/.bin` (falls back to `npx --no-install`; still nothing = no-op).
+  5. On findings, prints `{"decision":"block","reason":"<linter output>"}` — the model sees the diagnostics and fixes them. Clean lint, missing linter, or linter crash all exit silently: linting must never break the session.
 
 The hook never runs `--fix` — it reports, the model decides what to change.
 

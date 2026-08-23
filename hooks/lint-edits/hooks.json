@@ -2,8 +2,16 @@
   "name": "lint-edits",
   "description": "After each file edit, run the project's own linter (biome, eslint, or oxlint — auto-detected from config) on the changed file and hand any findings back to the model so it fixes them immediately.",
   "version": 1,
-  "files": ["scripts/lint.mjs"],
+  "files": ["scripts/lint.mjs", "scripts/check.mjs"],
   "hooks": [
+    {
+      "id": "lint-check",
+      "command": "node $HOOK_DIR/scripts/check.mjs",
+      "harnesses": {
+        "claude-code": { "event": "SessionStart" },
+        "codex": { "event": "SessionStart", "matcher": "startup|resume" }
+      }
+    },
     {
       "id": "lint-edits",
       "command": "node $HOOK_DIR/scripts/lint.mjs",
