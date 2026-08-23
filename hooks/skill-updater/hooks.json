@@ -1,0 +1,24 @@
+{
+  "name": "skill-updater",
+  "description": "Track which skills a session used (Skill invocations + SKILL.md reads), then at Stop ask the model once whether any skill's content should be updated based on how it went. The user confirms before any edit.",
+  "version": 1,
+  "files": ["scripts/mark.mjs", "scripts/nudge.mjs"],
+  "hooks": [
+    {
+      "id": "mark-skill-use",
+      "command": "node $HOOK_DIR/scripts/mark.mjs",
+      "harnesses": {
+        "claude-code": { "event": "PostToolUse", "matcher": "Skill|Read" },
+        "codex": { "event": "PostToolUse" }
+      }
+    },
+    {
+      "id": "nudge-update",
+      "command": "node $HOOK_DIR/scripts/nudge.mjs",
+      "harnesses": {
+        "claude-code": { "event": "Stop" },
+        "codex": { "event": "Stop" }
+      }
+    }
+  ]
+}
