@@ -7,6 +7,7 @@
 | Hook | Event | What it does |
 |---|---|---|
 | [`load-skills`](./hooks/load-skills/) | `SessionStart` | Tell the model to load and apply a configurable list of skills for the session |
+| [`lint-edits`](./hooks/lint-edits/) | `PostToolUse` | Run the project's own linter (biome/eslint/oxlint, auto-detected) on the file just edited and feed findings back to the model |
 | [`session-banner`](./hooks/session-banner/) | `SessionStart` | Print a one-line agent · project banner so you know which window is which |
 | [`skill-updater`](./hooks/skill-updater/) | `PostToolUse` + `Stop` | If a skill was used this session, ask once whether its content should be updated based on how it went — you confirm before any edit |
 | [`tool-latency`](./hooks/tool-latency/) | `PreToolUse` + `PostToolUse` | Record how long every tool call took; p50/p95 summary per tool |
