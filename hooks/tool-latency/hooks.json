@@ -6,13 +6,19 @@
   "hooks": [
     {
       "id": "latency-mark",
-      "event": "PreToolUse",
-      "command": "node $HOOK_DIR/scripts/mark.mjs"
+      "command": "node $HOOK_DIR/scripts/mark.mjs",
+      "harnesses": {
+        "claude-code": { "event": "PreToolUse" },
+        "codex": { "event": "PreToolUse" }
+      }
     },
     {
       "id": "latency-record",
-      "event": "PostToolUse",
-      "command": "node $HOOK_DIR/scripts/record.mjs"
+      "command": "node $HOOK_DIR/scripts/record.mjs",
+      "harnesses": {
+        "claude-code": { "event": "PostToolUse" },
+        "codex": { "event": "PostToolUse" }
+      }
     }
   ]
 }

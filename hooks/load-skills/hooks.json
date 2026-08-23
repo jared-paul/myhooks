@@ -9,9 +9,11 @@
   "hooks": [
     {
       "id": "load-skills",
-      "event": "SessionStart",
       "command": "node $HOOK_DIR/scripts/load-skills.mjs",
-      "agents": { "codex": { "matcher": "startup|resume" } }
+      "harnesses": {
+        "claude-code": { "event": "SessionStart" },
+        "codex": { "event": "SessionStart", "matcher": "startup|resume" }
+      }
     }
   ]
 }

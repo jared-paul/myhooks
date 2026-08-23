@@ -6,10 +6,11 @@
   "hooks": [
     {
       "id": "print-banner",
-      "event": "SessionStart",
       "command": "node $HOOK_DIR/scripts/banner.mjs",
-      "agents": {
+      "harnesses": {
+        "claude-code": { "event": "SessionStart" },
         "codex": {
+          "event": "SessionStart",
           "matcher": "startup|resume",
           "command": "MYHOOKS_BANNER_AGENT=codex node $HOOK_DIR/scripts/banner.mjs"
         }
