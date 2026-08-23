@@ -31,7 +31,11 @@ try {
     `lint-edits: ${hit.found} found but ${linter.name} isn't installed — edits won't be linted. ` +
       `Fix with \`npm i -D ${linter.name}\`, or \`npx @cerealbox/hooks remove lint-edits\` to drop the hook.\n`,
   );
-} catch {
-  // best-effort; never break session start
+} catch (e) {
+  try {
+    stdout.write(`lint-edits: startup check failed (${e?.message ?? e}) — edits may not be linted\n`);
+  } catch {
+    // stdout itself broken; nothing more we can do
+  }
 }
 exit(0);
